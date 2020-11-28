@@ -749,6 +749,7 @@ impl<T: Storage> Raft<T> {
 
         let mut has_ready = false;
         if self.election_elapsed >= self.election_timeout {
+            info!(self.logger, "election timeout triggered"; );
             self.election_elapsed = 0;
             if self.check_quorum {
                 let m = new_message(INVALID_ID, MessageType::MsgCheckQuorum, Some(self.id));
