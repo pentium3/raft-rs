@@ -408,6 +408,13 @@ impl<T: Storage> Raft<T> {
             to = m.to;
             "msg" => ?m,
         );
+        info!(
+            self.logger,
+            "Sending from {from} to {to}",
+            from = self.id,
+            to = m.to;
+            "msg" => ?m,
+        );
         m.from = self.id;
         if m.get_msg_type() == MessageType::MsgRequestVote
             || m.get_msg_type() == MessageType::MsgRequestPreVote
