@@ -1456,7 +1456,11 @@ impl<T: Storage> Raft<T> {
         let mut prs = self.take_prs();
         match m.get_msg_type() {
             MessageType::MsgAppendResponse => {
+                let dt = Local::now();
+                info!(self.logger, "handle_append_response start: {}", dt);
                 self.handle_append_response(m, &mut prs, ctx);
+                let dt2 = Local::now();
+                info!(self.logger, "handle_append_response end: {}", dt2);
             }
             MessageType::MsgHeartbeatResponse => {
                 self.handle_heartbeat_response(m, &mut prs, ctx);
