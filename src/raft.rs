@@ -550,13 +550,7 @@ impl<T: Storage> Raft<T> {
     /// Sends an append RPC with new entries (if any) and the current commit index to the given
     /// peer.
     pub fn send_append(&mut self, to: u64, pr: &mut Progress) {
-        let dt = Local::now();
-        info!(self.logger, "send_append start: {}", dt);
-        
         self.maybe_send_append(to, pr, true);
-
-        let dt2 = Local::now();
-        info!(self.logger, "send_append end: {}", dt2);
     }
 
     /// Sends an append RPC with new entries to the given peer,
