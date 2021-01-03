@@ -29,6 +29,10 @@ use super::storage::Storage;
 use super::Config;
 use crate::{util, HashMap, HashSet};
 
+use chrono::prelude::*;
+extern crate chrono;
+
+
 // CAMPAIGN_PRE_ELECTION represents the first phase of a normal election when
 // Config.pre_vote is true.
 const CAMPAIGN_PRE_ELECTION: &[u8] = b"CampaignPreElection";
@@ -546,7 +550,13 @@ impl<T: Storage> Raft<T> {
     /// Sends an append RPC with new entries (if any) and the current commit index to the given
     /// peer.
     pub fn send_append(&mut self, to: u64, pr: &mut Progress) {
+        let dt = Local::now();
+        info!(self.logger, "send_append start: {}", dt);
+        
         self.maybe_send_append(to, pr, true);
+
+        let dt2 = Local::now();
+        info!(self.logger, "send_append end: {}", dt2);
     }
 
     /// Sends an append RPC with new entries to the given peer,
@@ -619,8 +629,6 @@ impl<T: Storage> Raft<T> {
     /// according to the progress recorded in r.prs().
     pub fn bcast_append(&mut self) {
         //info!(self.logger, "election timeout triggered"; );
-        use chrono::prelude::*;
-        extern crate chrono;
         let dt = Local::now();
         info!(self.logger, "bcast_append start: {}", dt);
         // info!(self.logger, "bcast_append start: {}", dt.timestamp_millis());
