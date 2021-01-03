@@ -618,12 +618,22 @@ impl<T: Storage> Raft<T> {
     /// Sends RPC, with entries to all peers that are not up-to-date
     /// according to the progress recorded in r.prs().
     pub fn bcast_append(&mut self) {
+        //info!(self.logger, "election timeout triggered"; );
+        use chrono::prelude::*;
+        extern crate chrono;
+        let dt = Local::now();
+        info!(self.logger, "bcast_append start: {}", dt);
+        info!(self.logger, "bcast_append start: {}", dt.timestamp_millis());
+
         let self_id = self.id;
         let mut prs = self.take_prs();
         prs.iter_mut()
             .filter(|&(id, _)| *id != self_id)
             .for_each(|(id, pr)| self.send_append(*id, pr));
         self.set_prs(prs);
+
+        info!(self.logger, "bcast_append end: {}", dt);
+        info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
     }
 
     /// Broadcasts heartbeats to all the followers if it's leader.
