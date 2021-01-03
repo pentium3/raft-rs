@@ -623,7 +623,7 @@ impl<T: Storage> Raft<T> {
         extern crate chrono;
         let dt = Local::now();
         info!(self.logger, "bcast_append start: {}", dt);
-        info!(self.logger, "bcast_append start: {}", dt.timestamp_millis());
+        // info!(self.logger, "bcast_append start: {}", dt.timestamp_millis());
 
         let self_id = self.id;
         let mut prs = self.take_prs();
@@ -632,8 +632,9 @@ impl<T: Storage> Raft<T> {
             .for_each(|(id, pr)| self.send_append(*id, pr));
         self.set_prs(prs);
 
+        let dt = Local::now();
         info!(self.logger, "bcast_append end: {}", dt);
-        info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
+        // info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
     }
 
     /// Broadcasts heartbeats to all the followers if it's leader.
