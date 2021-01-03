@@ -632,8 +632,8 @@ impl<T: Storage> Raft<T> {
             .for_each(|(id, pr)| self.send_append(*id, pr));
         self.set_prs(prs);
 
-        let dt = Local::now();
-        info!(self.logger, "bcast_append end: {}", dt);
+        let dt2 = Local::now();
+        info!(self.logger, "bcast_append end: {}", dt2);
         // info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
     }
 
