@@ -410,10 +410,10 @@ impl<T: Storage> Raft<T> {
         );
         info!(
             self.logger,
-            "Sending from {from} to {to} , {msgtype} with len {msglen}",
+            "Sending from {from} to {to} , {:?} with len {msglen}",
             from = self.id,
             to = m.to,
-            msgtype = m.msg_type,
+            m.msg_type,
             msglen = m.entries.len(),
         );
         m.from = self.id;
