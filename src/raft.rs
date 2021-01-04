@@ -413,8 +413,8 @@ impl<T: Storage> Raft<T> {
             "Sending from {from} to {to} , {msgtype} with len {msglen}",
             from = self.id,
             to = m.to,
-            msgtype = m.get_msg_type(),
-            msglen = len(m.entries),
+            msgtype = m.msg_type,
+            msglen = m.entries.len(),
         );
         m.from = self.id;
         if m.get_msg_type() == MessageType::MsgRequestVote
