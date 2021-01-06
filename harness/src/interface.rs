@@ -55,7 +55,7 @@ impl Interface {
         }
         let dt2 = Local::now();
         info!(self.logger, "read_messages end: {}", dt2);
-        info!(self.logger, "read_messages duration: {}", dt2.timestamp_nanos()-dt1.timestamp_nanos());
+        info!(self.logger, "read_messages duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 }
 

@@ -643,7 +643,7 @@ impl<T: Storage> Raft<T> {
         let dt2 = Local::now();
         info!(self.logger, "bcast_append end: {}", dt2);
         // info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
-        info!(self.logger, "bcast_append duration: {}", dt2.timestamp_nanos()-dt1.timestamp_nanos());
+        info!(self.logger, "bcast_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
     /// Broadcasts heartbeats to all the followers if it's leader.
@@ -1462,7 +1462,7 @@ impl<T: Storage> Raft<T> {
                 self.handle_append_response(m, &mut prs, ctx);
                 let dt2 = Local::now();
                 info!(self.logger, "handle_append_response end: {}", dt2);
-                info!("handle_append_response duration: {}", dt2.timestamp_nanos()-dt1.timestamp_nanos());
+                info!("handle_append_response duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
             }
             MessageType::MsgHeartbeatResponse => {
                 self.handle_heartbeat_response(m, &mut prs, ctx);
