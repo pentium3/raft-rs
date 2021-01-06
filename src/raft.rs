@@ -401,6 +401,8 @@ impl<T: Storage> Raft<T> {
 
     // send persists state to stable storage and then sends to its mailbox.
     fn send(&mut self, mut m: Message) {
+        let dt1 = Local::now();
+        info!(self.logger, "send_rf start: {}", dt1);
         debug!(
             self.logger,
             "Sending from {from} to {to}",
@@ -410,7 +412,7 @@ impl<T: Storage> Raft<T> {
         );
         info!(
             self.logger,
-            "Sending {:?} with len {msglen}",
+            "send_rf: Sending {:?} with len {msglen}",
             m.get_msg_type(),
             msglen = m.entries.len(),
         );
@@ -459,6 +461,9 @@ impl<T: Storage> Raft<T> {
             }
         }
         self.msgs.push(m);
+        let dt2 = Local::now();
+        info!(self.logger, "send_rf end: {}", dt2);
+        info!(self.logger, "send_rf duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
     fn prepare_send_snapshot(&mut self, m: &mut Message, pr: &mut Progress, to: u64) -> bool {
