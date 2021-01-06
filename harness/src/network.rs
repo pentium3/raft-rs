@@ -160,6 +160,8 @@ impl Network {
     ///
     /// NOTE: the given `msgs` won't be filtered by its filters.
     pub fn send(&mut self, msgs: Vec<Message>) {
+        let dt1 = Local::now();
+        info!(self.logger, "send start: {}", dt1);
         let mut msgs = msgs;
         while !msgs.is_empty() {
             let mut new_msgs = vec![];
@@ -173,6 +175,9 @@ impl Network {
             }
             msgs.append(&mut new_msgs);
         }
+        let dt2 = Local::now();
+        info!(self.logger, "send end: {}", dt2);
+        info!(self.logger, "send duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
     /// Filter `msgs` and then instruct the cluster to `step` through the given messages.

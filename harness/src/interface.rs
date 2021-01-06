@@ -47,15 +47,10 @@ impl Interface {
 
     /// Read messages out of the raft.
     pub fn read_messages(&mut self) -> Vec<Message> {
-        let dt1 = Local::now();
-        info!(self.logger, "read_messages start: {}", dt1);
         match self.raft {
             Some(_) => self.msgs.drain(..).collect(),
             None => vec![],
         }
-        let dt2 = Local::now();
-        info!(self.logger, "read_messages end: {}", dt2);
-        info!(self.logger, "read_messages duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 }
 
