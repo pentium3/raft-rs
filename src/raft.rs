@@ -629,8 +629,8 @@ impl<T: Storage> Raft<T> {
     /// according to the progress recorded in r.prs().
     pub fn bcast_append(&mut self) {
         //info!(self.logger, "election timeout triggered"; );
-        let dt = Local::now();
-        info!(self.logger, "bcast_append start: {}", dt);
+        let dt1 = Local::now();
+        info!(self.logger, "bcast_append start: {}", dt1);
         // info!(self.logger, "bcast_append start: {}", dt.timestamp_millis());
 
         let self_id = self.id;
@@ -643,6 +643,7 @@ impl<T: Storage> Raft<T> {
         let dt2 = Local::now();
         info!(self.logger, "bcast_append end: {}", dt2);
         // info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
+        info!(self.logger, "bcast_append duration: {}", dt2.timestamp_nanos()-dt1.timestamp_nanos());
     }
 
     /// Broadcasts heartbeats to all the followers if it's leader.
@@ -1456,11 +1457,12 @@ impl<T: Storage> Raft<T> {
         let mut prs = self.take_prs();
         match m.get_msg_type() {
             MessageType::MsgAppendResponse => {
-                let dt = Local::now();
-                info!(self.logger, "handle_append_response start: {}", dt);
+                let dt1 = Local::now();
+                info!(self.logger, "handle_append_response start: {}", dt1);
                 self.handle_append_response(m, &mut prs, ctx);
                 let dt2 = Local::now();
                 info!(self.logger, "handle_append_response end: {}", dt2);
+                info!("handle_append_response duration: {}", dt2.timestamp_nanos()-dt1.timestamp_nanos());
             }
             MessageType::MsgHeartbeatResponse => {
                 self.handle_heartbeat_response(m, &mut prs, ctx);
