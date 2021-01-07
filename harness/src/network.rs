@@ -176,8 +176,8 @@ impl Network {
             msgs.append(&mut new_msgs);
         }
         let dt2 = Local::now();
-        info!(self.logger, "msgs len== {}", msgs.len());
         info!(self.logger, "send_nw end: {}", dt2);
+        info!(self.logger, "send_nw msgs_len== {}", msgs.len());
         info!(self.logger, "send_nw duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 

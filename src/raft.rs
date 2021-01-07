@@ -463,6 +463,7 @@ impl<T: Storage> Raft<T> {
         self.msgs.push(m);
         let dt2 = Local::now();
         info!(self.logger, "send_rf end: {}", dt2);
+        info!(self.logger, "send_rf msgs_len== {}", self.msgs.len());
         info!(self.logger, "send_rf duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
