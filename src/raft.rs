@@ -401,8 +401,8 @@ impl<T: Storage> Raft<T> {
 
     // send persists state to stable storage and then sends to its mailbox.
     fn send(&mut self, mut m: Message) {
-        let dt1 = Local::now();
-        info!(self.logger, "send_rf start: {}", dt1);
+        // let dt1 = Local::now();
+        // info!(self.logger, "send_rf start: {}", dt1);
         debug!(
             self.logger,
             "Sending from {from} to {to}",
@@ -461,10 +461,10 @@ impl<T: Storage> Raft<T> {
             }
         }
         self.msgs.push(m);
-        let dt2 = Local::now();
-        info!(self.logger, "send_rf end: {}", dt2);
-        info!(self.logger, "send_rf msgs_len== {}", self.msgs.len());
-        info!(self.logger, "send_rf duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+        // let dt2 = Local::now();
+        // info!(self.logger, "send_rf end: {}", dt2);
+        // info!(self.logger, "send_rf msgs_len== {}", self.msgs.len());
+        // info!(self.logger, "send_rf duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
     fn prepare_send_snapshot(&mut self, m: &mut Message, pr: &mut Progress, to: u64) -> bool {
@@ -571,6 +571,8 @@ impl<T: Storage> Raft<T> {
     /// ("empty" messages are useful to convey updated Commit indexes, but
     /// are undesirable when we're sending multiple messages in a batch).
     fn maybe_send_append(&mut self, to: u64, pr: &mut Progress, allow_empty: bool) -> bool {
+        let dt1 = Local::now();
+
         if pr.is_paused() {
             trace!(
                 self.logger,
@@ -596,6 +598,10 @@ impl<T: Storage> Raft<T> {
             match (term, ents) {
                 (Ok(term), Ok(mut ents)) => {
                     if self.batch_append && self.try_batching(to, pr, &mut ents) {
+
+                        let dt2 = Local::now();
+                        info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+
                         return true;
                     }
                     self.prepare_send_entries(&mut m, pr, term, ents)
@@ -609,6 +615,10 @@ impl<T: Storage> Raft<T> {
             }
         }
         self.send(m);
+
+        let dt2 = Local::now();
+        info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+
         true
     }
 
@@ -1858,6 +1868,9 @@ impl<T: Storage> Raft<T> {
     // TODO: revoke pub when there is a better way to test.
     /// For a given message, append the entries to the log.
     pub fn handle_append_entries(&mut self, m: &Message) {
+        let dt1 = Local::now();
+        info!(self.logger, "handle_append_entries start: {}", dt1);
+
         if self.pending_request_snapshot != INVALID_INDEX {
             self.send_request_snapshot();
             return;
@@ -1901,6 +1914,10 @@ impl<T: Storage> Raft<T> {
             to_send.reject_hint = self.raft_log.last_index();
             self.send(to_send);
         }
+
+        let dt2 = Local::now();
+        info!(self.logger, "handle_append_entries end: {}", dt2);
+        info!(self.logger, "handle_append_entries duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
     // TODO: revoke pub when there is a better way to test.
