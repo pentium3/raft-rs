@@ -571,7 +571,7 @@ impl<T: Storage> Raft<T> {
     /// ("empty" messages are useful to convey updated Commit indexes, but
     /// are undesirable when we're sending multiple messages in a batch).
     fn maybe_send_append(&mut self, to: u64, pr: &mut Progress, allow_empty: bool) -> bool {
-        let dt1 = Local::now();
+        // let dt1 = Local::now();
 
         if pr.is_paused() {
             trace!(
@@ -599,8 +599,8 @@ impl<T: Storage> Raft<T> {
                 (Ok(term), Ok(mut ents)) => {
                     if self.batch_append && self.try_batching(to, pr, &mut ents) {
 
-                        let dt2 = Local::now();
-                        info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+                        // let dt2 = Local::now();
+                        // info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
 
                         return true;
                     }
@@ -616,8 +616,8 @@ impl<T: Storage> Raft<T> {
         }
         self.send(m);
 
-        let dt2 = Local::now();
-        info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+        // let dt2 = Local::now();
+        // info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
 
         true
     }
@@ -645,7 +645,7 @@ impl<T: Storage> Raft<T> {
     /// according to the progress recorded in r.prs().
     pub fn bcast_append(&mut self) {
         //info!(self.logger, "election timeout triggered"; );
-        let dt1 = Local::now();
+        // let dt1 = Local::now();
         // info!(self.logger, "bcast_append start: {}", dt1);
 
         let self_id = self.id;
@@ -655,9 +655,9 @@ impl<T: Storage> Raft<T> {
             .for_each(|(id, pr)| self.send_append(*id, pr));
         self.set_prs(prs);
 
-        let dt2 = Local::now();
+        // let dt2 = Local::now();
         // info!(self.logger, "bcast_append end: {}", dt2);
-        info!(self.logger, "bcast_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+        // info!(self.logger, "bcast_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
     /// Broadcasts heartbeats to all the followers if it's leader.
@@ -1471,10 +1471,10 @@ impl<T: Storage> Raft<T> {
         let mut prs = self.take_prs();
         match m.get_msg_type() {
             MessageType::MsgAppendResponse => {
-                let dt1 = Local::now();
+                // let dt1 = Local::now();
                 self.handle_append_response(m, &mut prs, ctx);
-                let dt2 = Local::now();
-                info!(self.logger, "handle_append_response duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+                // let dt2 = Local::now();
+                // info!(self.logger, "handle_append_response duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
             }
             MessageType::MsgHeartbeatResponse => {
                 self.handle_heartbeat_response(m, &mut prs, ctx);
