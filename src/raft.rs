@@ -646,8 +646,7 @@ impl<T: Storage> Raft<T> {
     pub fn bcast_append(&mut self) {
         //info!(self.logger, "election timeout triggered"; );
         let dt1 = Local::now();
-        info!(self.logger, "bcast_append start: {}", dt1);
-        // info!(self.logger, "bcast_append start: {}", dt.timestamp_millis());
+        // info!(self.logger, "bcast_append start: {}", dt1);
 
         let self_id = self.id;
         let mut prs = self.take_prs();
@@ -657,8 +656,7 @@ impl<T: Storage> Raft<T> {
         self.set_prs(prs);
 
         let dt2 = Local::now();
-        info!(self.logger, "bcast_append end: {}", dt2);
-        // info!(self.logger, "bcast_append end: {}", dt.timestamp_millis());
+        // info!(self.logger, "bcast_append end: {}", dt2);
         info!(self.logger, "bcast_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
@@ -1474,10 +1472,8 @@ impl<T: Storage> Raft<T> {
         match m.get_msg_type() {
             MessageType::MsgAppendResponse => {
                 let dt1 = Local::now();
-                info!(self.logger, "handle_append_response start: {}", dt1);
                 self.handle_append_response(m, &mut prs, ctx);
                 let dt2 = Local::now();
-                info!(self.logger, "handle_append_response end: {}", dt2);
                 info!(self.logger, "handle_append_response duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
             }
             MessageType::MsgHeartbeatResponse => {
@@ -1869,7 +1865,6 @@ impl<T: Storage> Raft<T> {
     /// For a given message, append the entries to the log.
     pub fn handle_append_entries(&mut self, m: &Message) {
         let dt1 = Local::now();
-        info!(self.logger, "handle_append_entries start: {}", dt1);
 
         if self.pending_request_snapshot != INVALID_INDEX {
             self.send_request_snapshot();
@@ -1916,7 +1911,6 @@ impl<T: Storage> Raft<T> {
         }
 
         let dt2 = Local::now();
-        info!(self.logger, "handle_append_entries end: {}", dt2);
         info!(self.logger, "handle_append_entries duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
     }
 
