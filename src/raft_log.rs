@@ -453,6 +453,7 @@ impl<T: Storage> RaftLog<T> {
 
         if low < self.unstable.offset {
             let unstable_high = cmp::min(high, self.unstable.offset);
+            info!("slice_info: {} {}", low, unstable_high);
             match self.store.entries(low, unstable_high, max_size) {
                 Err(e) => match e {
                     Error::Store(StorageError::Compacted) => return Err(e),
