@@ -590,6 +590,7 @@ impl<T: Storage> Raft<T> {
                 return false;
             }
         } else {
+            info!(self.logger, "maybe_send_append_info: {} {}", to, pr.next_idx);
             let ents = self.raft_log.entries(pr.next_idx, self.max_msg_size);
             if !allow_empty && ents.as_ref().ok().map_or(true, |e| e.is_empty()) {
                 return false;
