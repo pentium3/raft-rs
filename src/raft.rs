@@ -616,8 +616,8 @@ impl<T: Storage> Raft<T> {
                 }
             }
         }
-        self.send(m);
         info!(self.logger, "maybe_send_append_info2: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgAppend
+        self.send(m);
 
         // let dt2 = Local::now();
         // info!(self.logger, "maybe_send_append duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
