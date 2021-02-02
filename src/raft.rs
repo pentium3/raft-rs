@@ -616,8 +616,7 @@ impl<T: Storage> Raft<T> {
                 }
             }
         }
-        info!(self.logger, "maybe_send_append_info2: {} {} {} {} {}", m.to, m.term, m.index, pr.next_idx, pr.matched);
-        info!(self.logger, "maybe_send_append_info2_send_rf: Sending {:?}", m.get_msg_type() );
+        info!(self.logger, "maybe_send_append_info2: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());
         self.send(m);
 
         // let dt2 = Local::now();
