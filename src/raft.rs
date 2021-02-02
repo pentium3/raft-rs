@@ -591,7 +591,7 @@ impl<T: Storage> Raft<T> {
             }
         } else {
             //info!(self.logger, "maybe_send_append_info: {} {}", to, pr.next_idx);
-            info!(self.logger, "maybe_send_append_info1: {} {} {} {} {}", m.to, m.term, m.index, pr.next_idx, pr.matched);
+            info!(self.logger, "maybe_send_append_info1: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());
             let ents = self.raft_log.entries(pr.next_idx, self.max_msg_size);
             if !allow_empty && ents.as_ref().ok().map_or(true, |e| e.is_empty()) {
                 return false;
