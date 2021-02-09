@@ -658,10 +658,8 @@ impl<T: Storage> Raft<T> {
             .for_each(|(id, pr)| self.send_append(*id, pr));
         self.set_prs(prs);
 
-        
-        for elem in prs.iter_mut(){
-            info!(self.logger, "bcast_append prsset_id: {}", *elem.id);
-        }
+        prs.iter_mut()
+            .for_each(|(id, pr)| info!(self.logger, "bcast_append prsset_id: {}", *id));
         info!(self.logger, "bcast_append selfid: {}", self_id);
 
         // let dt2 = Local::now();
