@@ -591,7 +591,7 @@ impl<T: Storage> Raft<T> {
             }
         } else {
             //info!(self.logger, "maybe_send_append_info: {} {}", to, pr.next_idx);
-            info!(self.logger, "maybe_send_append_info1: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgHup
+            info!(self.logger, "maybe_send_append_info1::: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgHup
             let ents = self.raft_log.entries(pr.next_idx, self.max_msg_size);
             if !allow_empty && ents.as_ref().ok().map_or(true, |e| e.is_empty()) {
                 return false;
@@ -616,7 +616,7 @@ impl<T: Storage> Raft<T> {
                 }
             }
         }
-        info!(self.logger, "maybe_send_append_info2: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgAppend
+        info!(self.logger, "maybe_send_append_info2::: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgAppend
         self.send(m);
 
         // let dt2 = Local::now();
