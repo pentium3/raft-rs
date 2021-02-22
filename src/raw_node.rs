@@ -287,6 +287,8 @@ impl<T: Storage> RawNode<T> {
         e.data = data;
         e.context = context;
         m.set_entries(vec![e].into());
+        
+        info!(self.logger, "proposing here : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         self.raft.step(m)
     }
 
