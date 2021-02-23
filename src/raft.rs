@@ -616,7 +616,7 @@ impl<T: Storage> Raft<T> {
                 }
             }
         }
-        info!(self.logger, "maybe_send_append_info2: {} {} {} {} {} {:?}", m.to, pr.next_idx, m.get_msg_type());  //MsgAppend
+        info!(self.logger, "maybe_send_append_info2: {} {} {:?}", m.to, pr.next_idx, m.get_msg_type());  //MsgAppend
         //info!(self.logger, "maybe_send_append_info2: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgAppend
         self.send(m);
 
