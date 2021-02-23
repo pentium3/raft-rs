@@ -1301,6 +1301,11 @@ impl<T: Storage> Raft<T> {
         }
 
         ctx.old_paused = pr.is_paused();
+
+        if pr.is_paused() {
+            info!(self.logger, "currently paused: {} {} {} {:?}", m.from, pr.state == ProgressState::Replicate, pr.state == ProgressState::Snapshot, m.get_msg_type());
+        }
+
         if !pr.maybe_update(m.index) {
             return;
         }
@@ -1363,11 +1368,7 @@ impl<T: Storage> Raft<T> {
             if pr.matched < self.raft_log.last_index()
                 || pr.pending_request_snapshot != INVALID_INDEX
             {
-                if pr.matched < self.raft_log.last_index() {
-                    info!(self.logger, "requesting snapshot 1: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
-                } else {
-                    info!(self.logger, "requesting snapshot 2: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
-                }
+                //info!(self.logger, "requesting snapshot 1: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
                 ctx.send_append = true;
             }
 
