@@ -1520,6 +1520,7 @@ impl<T: Storage> Raft<T> {
     }
 
     fn step_leader(&mut self, mut m: Message) -> Result<()> {
+        info!(self.logger, "bcast_append in step_leader 2: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         // These message types do not require any progress for m.From.
         match m.get_msg_type() {
             MessageType::MsgBeat => {
