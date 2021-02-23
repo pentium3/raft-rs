@@ -275,6 +275,7 @@ impl<T: Storage> RawNode<T> {
     pub fn campaign(&mut self) -> Result<()> {
         let mut m = Message::default();
         m.set_msg_type(MessageType::MsgHup);
+        info!(self.raft.logger, "stepping inside campaign : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         self.raft.step(m)
     }
 
@@ -288,7 +289,7 @@ impl<T: Storage> RawNode<T> {
         e.context = context;
         m.set_entries(vec![e].into());
         
-        info!(self.raft.logger, "proposing here : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
+        info!(self.raft.logger, "stepping inside propose : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         self.raft.step(m)
     }
 
@@ -310,6 +311,7 @@ impl<T: Storage> RawNode<T> {
         e.data = data;
         e.context = context;
         m.set_entries(vec![e].into());
+        info!(self.raft.logger, "stepping inside propose_config_change : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         self.raft.step(m)
     }
 
@@ -443,6 +445,7 @@ impl<T: Storage> RawNode<T> {
         m.set_msg_type(MessageType::MsgUnreachable);
         m.from = id;
         // we don't care if it is ok actually
+        info!(self.raft.logger, "stepping inside report_unreachable : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         let _ = self.raft.step(m);
     }
 
@@ -454,6 +457,7 @@ impl<T: Storage> RawNode<T> {
         m.from = id;
         m.reject = rej;
         // we don't care if it is ok actually
+        info!(self.raft.logger, "stepping inside report_snapshot : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         let _ = self.raft.step(m);
     }
 
@@ -468,6 +472,7 @@ impl<T: Storage> RawNode<T> {
         let mut m = Message::default();
         m.set_msg_type(MessageType::MsgTransferLeader);
         m.from = transferee;
+        info!(self.raft.logger, "stepping inside transfer_leader : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         let _ = self.raft.step(m);
     }
 
@@ -481,6 +486,7 @@ impl<T: Storage> RawNode<T> {
         let mut e = Entry::default();
         e.data = rctx;
         m.set_entries(vec![e].into());
+        info!(self.raft.logger, "stepping inside read_index : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         let _ = self.raft.step(m);
     }
 
