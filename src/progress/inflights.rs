@@ -18,12 +18,12 @@
 #[derive(Debug, PartialEq)]
 pub struct Inflights {
     // the starting index in the buffer
-    start: usize,
+    pub start: usize,
     // number of inflights in the buffer
     count: usize,
 
     // ring buffer
-    buffer: Vec<u64>,
+    pub buffer: Vec<u64>,
 }
 
 // The `buffer` must have it's capacity set correctly on clone, normally it does not.
