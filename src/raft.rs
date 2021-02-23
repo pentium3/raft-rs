@@ -1621,7 +1621,7 @@ impl<T: Storage> Raft<T> {
             _ => {}
         }
 
-        let mut ctx = HandleResponseContex;
+        let mut ctx = HandleResponseContext::default();
         self.check_message_with_progress(&mut m, &mut ctx);
         if ctx.maybe_commit {
             if self.maybe_commit() {
