@@ -1302,6 +1302,9 @@ impl<T: Storage> Raft<T> {
 
         ctx.old_paused = pr.is_paused();
 
+        // first retry trigger. @Yuanli: figure out why this first retry happens
+        // one theory is that leader has too many outgoing messages and this causes
+        // the sliding window to be full.
         if pr.is_paused() {
             info!(self.logger, "currently paused: {} {} {} {:?}", m.from, pr.state == ProgressState::Replicate, m.index,  m.get_msg_type());
         }
@@ -1371,8 +1374,11 @@ impl<T: Storage> Raft<T> {
             if pr.matched < self.raft_log.last_index()
                 || pr.pending_request_snapshot != INVALID_INDEX
             {
+                // second - last retry. @Yuanli: figure out why this is triggered.
+                // pr.matched is not changed, but why? (it's updated inside update_state)
+                //
                 //info!(self.logger, "requesting snapshot 1: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
-                ctx.send_append = true;
+                ctx.send_append = true; //this boolean is important
             }
 
             if self.read_only.option != ReadOnlyOption::Safe || m.context.is_empty() {
@@ -1640,7 +1646,7 @@ impl<T: Storage> Raft<T> {
             } else if ctx.old_paused {
                 // update() reset the wait state on this node. If we had delayed sending
                 // an update before, send it now.
-                ctx.send_append = true;
+                ctx.send_append = true; //this boolean is important
             }
         }
 
