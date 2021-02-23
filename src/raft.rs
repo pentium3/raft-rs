@@ -1303,7 +1303,7 @@ impl<T: Storage> Raft<T> {
         ctx.old_paused = pr.is_paused();
 
         if pr.is_paused() {
-            info!(self.logger, "currently paused: {} {} {} {:?}", m.from, pr.state == ProgressState::Replicate, pr.state == ProgressState::Snapshot, m.get_msg_type());
+            info!(self.logger, "currently paused: {} {} {} {:?}", m.from, pr.state == ProgressState::Replicate, m.index,  m.get_msg_type());
         }
 
         if !pr.maybe_update(m.index) {
@@ -1323,7 +1323,11 @@ impl<T: Storage> Raft<T> {
                     pr.become_probe();
                 }
             }
+            let size = pr.ins.count;
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
+            if size == pr.ins.count {
+                info!(self.logger, "free_to did nothing");
+            }
         }
         ctx.maybe_commit = true;
         // We've updated flow control information above, which may
