@@ -1324,9 +1324,9 @@ impl<T: Storage> Raft<T> {
                 }
             }
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
-            if m.get_index() < pr.ins.buffer[pr.ins.start] {
-                info!(self.logger, "free_to did nothing");
-            }
+        }
+        if pr.is_paused() && m.get_index() < pr.ins.buffer[pr.ins.start] {
+            info!(self.logger, "free_to did nothing");
         }
         ctx.maybe_commit = true;
         // We've updated flow control information above, which may
