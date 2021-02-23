@@ -1323,9 +1323,8 @@ impl<T: Storage> Raft<T> {
                     pr.become_probe();
                 }
             }
-            let size = pr.ins.count;
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
-            if size == pr.ins.count {
+            if m.get_index() < pr.ins.buffer[pr.ins.start] {
                 info!(self.logger, "free_to did nothing");
             }
         }
