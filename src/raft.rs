@@ -1363,7 +1363,11 @@ impl<T: Storage> Raft<T> {
             if pr.matched < self.raft_log.last_index()
                 || pr.pending_request_snapshot != INVALID_INDEX
             {
-                info!(self.logger, "requesting snapshot: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
+                if pr.matched < self.raft_log.last_index() {
+                    info!(self.logger, "requesting snapshot 1: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
+                } else {
+                    info!(self.logger, "requesting snapshot 2: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
+                }
                 ctx.send_append = true;
             }
 
@@ -1521,7 +1525,7 @@ impl<T: Storage> Raft<T> {
     }
 
     fn step_leader(&mut self, mut m: Message) -> Result<()> {
-        info!(self.logger, "bcast_append in step_leader 2: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
+        info!(self.logger, "start of step_leader: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         // These message types do not require any progress for m.From.
         match m.get_msg_type() {
             MessageType::MsgBeat => {
