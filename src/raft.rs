@@ -1525,7 +1525,7 @@ impl<T: Storage> Raft<T> {
     }
 
     fn step_leader(&mut self, mut m: Message) -> Result<()> {
-        info!(self.logger, "start of step_leader: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
+        info!(self.logger, "start of step_leader: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());  //MsgAppend
         // These message types do not require any progress for m.From.
         match m.get_msg_type() {
             MessageType::MsgBeat => {
@@ -1581,7 +1581,7 @@ impl<T: Storage> Raft<T> {
                         }
                     }
                 }
-                info!(self.logger, "bcast_append in step_leader 1: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
+                info!(self.logger, "bcast_append in step_leader 1: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());  //MsgAppend
                 self.append_entry(&mut m.mut_entries());
                 self.bcast_append();
                 return Ok(());
@@ -1649,7 +1649,7 @@ impl<T: Storage> Raft<T> {
                 self.send_append(from, pr);
             }
             if ctx.loop_append {
-                info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());
+                info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());
                 while self.maybe_send_append(from, pr, false) {}
             }
             self.set_prs(prs);
