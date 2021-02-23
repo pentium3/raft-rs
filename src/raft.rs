@@ -778,6 +778,7 @@ impl<T: Storage> Raft<T> {
 
         self.election_elapsed = 0;
         let m = new_message(INVALID_ID, MessageType::MsgHup, Some(self.id));
+        info!(self.logger, "stepping inside tick_election: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         let _ = self.step(m);
         true
     }
@@ -795,6 +796,7 @@ impl<T: Storage> Raft<T> {
             if self.check_quorum {
                 let m = new_message(INVALID_ID, MessageType::MsgCheckQuorum, Some(self.id));
                 has_ready = true;
+                info!(self.logger, "stepping inside tick_heartbeat 1: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
                 let _ = self.step(m);
             }
             if self.state == StateRole::Leader && self.lead_transferee.is_some() {
@@ -810,6 +812,7 @@ impl<T: Storage> Raft<T> {
             self.heartbeat_elapsed = 0;
             has_ready = true;
             let m = new_message(INVALID_ID, MessageType::MsgBeat, Some(self.id));
+            info!(self.logger, "stepping inside tick_heartbeat 2: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
             let _ = self.step(m);
         }
         has_ready
@@ -1633,11 +1636,12 @@ impl<T: Storage> Raft<T> {
             let from = m.from;
             let mut prs = self.take_prs();
             let pr = prs.get_mut(from).unwrap();
-            info!(self.logger, "send_append or loop_append: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
             if ctx.send_append {
+                info!(self.logger, "send_append inside send_or_loop: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
                 self.send_append(from, pr);
             }
             if ctx.loop_append {
+                info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
                 while self.maybe_send_append(from, pr, false) {}
             }
             self.set_prs(prs);
