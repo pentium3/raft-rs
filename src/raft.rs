@@ -1089,6 +1089,7 @@ impl<T: Storage> Raft<T> {
                 // with "pb.MsgAppResp" of higher term would force leader to step down.
                 // However, this disruption is inevitable to free this stuck node with
                 // fresh election. This can be prevented with Pre-Vote phase.
+                info!(self.logger, "storing MsgAppendResponse here");  //MsgAppend
                 let to_send = new_message(m.from, MessageType::MsgAppendResponse, None);
                 self.send(to_send);
             } else if m.get_msg_type() == MessageType::MsgRequestPreVote {
