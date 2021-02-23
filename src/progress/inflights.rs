@@ -83,6 +83,7 @@ impl Inflights {
     /// Frees the inflights smaller or equal to the given `to` flight.
     pub fn free_to(&mut self, to: u64) {
         if self.count == 0 || to < self.buffer[self.start] {
+            info!(self.logger, "not really freeing");
             // out of the left side of the window
             return;
         }
