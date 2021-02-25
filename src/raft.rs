@@ -574,9 +574,9 @@ impl<T: Storage> Raft<T> {
         // let dt1 = Local::now();
 
         if pr.is_paused() {
-            trace!(
+            info!(
                 self.logger,
-                "Skipping sending to {to}, it's paused",
+                "Skipping sending to {to}, it'spaused",
                 to = to;
                 "progress" => ?pr,
             );
@@ -1306,7 +1306,7 @@ impl<T: Storage> Raft<T> {
         // one theory is that leader has too many outgoing messages and this causes
         // the sliding window to be full.
         if pr.is_paused() {
-            info!(self.logger, "currently paused: {} {} {} {:?}", m.from, pr.state == ProgressState::Replicate, m.index,  m.get_msg_type());
+            info!(self.logger, "currently paused: {} {:?} {} {:?}", m.from, pr.state, m.index,  m.get_msg_type());
         }
 
         if !pr.maybe_update(m.index) {
