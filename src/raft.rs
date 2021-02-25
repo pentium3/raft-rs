@@ -1379,6 +1379,7 @@ impl<T: Storage> Raft<T> {
                 //
                 //info!(self.logger, "requesting snapshot 1: {} {} {} {:?}", m.from, pr.next_idx, ctx.maybe_commit, m.get_msg_type());  //MsgAppend
                 ctx.send_append = true; //this boolean is important
+                info!(self.logger, "secondtry: {} {}", pr.matched, self.raft_log.last_index());  //MsgAppend
             }
 
             if self.read_only.option != ReadOnlyOption::Safe || m.context.is_empty() {
