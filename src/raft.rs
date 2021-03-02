@@ -1303,8 +1303,8 @@ impl<T: Storage> Raft<T> {
         ctx.old_paused = pr.is_paused();
 
         // first retry trigger. @Yuanli: figure out why this first retry happens
-        // one theory is that leader has too many outgoing messages and this causes
-        // the sliding window to be full.
+        // one theory is that leader has too many outgoing messages and this causes the sliding window to be full.
+        // update: I think that's true.  ins is a sliding window used for controlling the msg flow. It will move forward after receiving MsgAppendResponse
         if pr.is_paused() {
             info!(self.logger, "currently paused: {} {:?} {} {:?}", m.from, pr.state, m.index,  m.get_msg_type());
         }

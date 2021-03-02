@@ -162,6 +162,7 @@ impl Progress {
     /// Returns false if the given n index comes from an outdated message.
     /// Otherwise it updates the progress and returns true.
     pub fn maybe_update(&mut self, n: u64) -> bool {
+        info!(self.logger, "maybe_update: {} {}", self.matched, n);
         let need_update = self.matched < n;
         if need_update {
             self.matched = n;
