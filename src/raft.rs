@@ -1311,6 +1311,7 @@ impl<T: Storage> Raft<T> {
         }
 
         if !pr.maybe_update(m.index) {
+            info!(self.logger, "pr_maybe_update: false");
             return;
         }
 
