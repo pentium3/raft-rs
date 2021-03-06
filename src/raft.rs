@@ -752,7 +752,7 @@ impl<T: Storage> Raft<T> {
 
         let self_id = self.id;
         let maybe_update_status = self.mut_prs().get_mut(self_id).unwrap().maybe_update(li);
-        info!(self.logger, "maybe_update: {} {} {}", maybe_update_status, self.mut_prs().get_mut(self_id).unwrap().matched);
+        info!(self.logger, "maybe_update: {} {}", maybe_update_status, self.mut_prs().get_mut(self_id).unwrap().matched);
 
         // Regardless of maybe_commit's return, our caller will call bcastAppend.
         self.maybe_commit();
