@@ -1315,7 +1315,7 @@ impl<T: Storage> Raft<T> {
             info!(self.logger, "pr_maybe_update: false");
             return;
         } else {
-            info!(self.logger, "pr_maybe_update: true");
+            info!(self.logger, "pr_maybe_update: true {} {}", m.from, pr.matched);
         }
 
         match pr.state {
