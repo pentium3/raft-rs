@@ -531,7 +531,7 @@ impl<T: Storage> Raft<T> {
         m.commit = self.raft_log.committed;
         if !m.entries.is_empty() {
             let last = m.entries.last().unwrap().index;
-            info!(self.logger, "updating state: {}", last);
+            info!(self.logger, "updating state: {} {}", m.to, last);
             pr.update_state(last);
         }
     }
@@ -1336,9 +1336,9 @@ impl<T: Storage> Raft<T> {
         }
         if pr.ins.count != 0 && m.get_index() < pr.ins.buffer[pr.ins.start] {
             if pr.is_paused() {
-                info!(self.logger, "paused: free_to did nothing {}", m.get_index());
+                info!(self.logger, "paused: free_to did nothing {} {}", m.from, m.get_index());
             } else {
-                info!(self.logger, "not paused: free_to did nothing {}", m.get_index());
+                info!(self.logger, "not paused: free_to did nothing {} {}", m.from, m.get_index());
             }
         }
         ctx.maybe_commit = true;
