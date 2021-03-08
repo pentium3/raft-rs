@@ -20,7 +20,7 @@ pub struct Inflights {
     // the starting index in the buffer
     pub start: usize,
     // number of inflights in the buffer
-    count: usize,
+    pub count: usize,
 
     // ring buffer
     pub buffer: Vec<u64>,
