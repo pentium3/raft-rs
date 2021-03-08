@@ -1334,7 +1334,7 @@ impl<T: Storage> Raft<T> {
             }
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
         }
-        /*if m.get_index() < pr.ins.buffer[pr.ins.start] {
+        /*if pr.ins.count != 0 && m.get_index() < pr.ins.buffer[pr.ins.start] {
             if pr.is_paused() {
                 info!(self.logger, "paused: free_to did nothing {}", m.get_index());
             } else {
