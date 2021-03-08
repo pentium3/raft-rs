@@ -1334,13 +1334,13 @@ impl<T: Storage> Raft<T> {
             }
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
         }
-        if m.get_index() < pr.ins.buffer[pr.ins.start] {
+        /*if m.get_index() < pr.ins.buffer[pr.ins.start] {
             if pr.is_paused() {
-                info!(self.logger, "paused: free_to did nothing");
+                info!(self.logger, "paused: free_to did nothing {}", m.get_index());
             } else {
-                info!(self.logger, "not paused: free_to did nothing");
+                info!(self.logger, "not paused: free_to did nothing {}", m.get_index());
             }
-        }
+        }*/
         ctx.maybe_commit = true;
         // We've updated flow control information above, which may
         // allow us to send multiple (size-limited) in-flight messages
