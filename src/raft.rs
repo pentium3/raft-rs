@@ -531,6 +531,7 @@ impl<T: Storage> Raft<T> {
         m.commit = self.raft_log.committed;
         if !m.entries.is_empty() {
             let last = m.entries.last().unwrap().index;
+            info!(self.logger, "updating state: {}", last);
             pr.update_state(last);
         }
     }
@@ -1333,8 +1334,12 @@ impl<T: Storage> Raft<T> {
             }
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
         }
-        if pr.is_paused() && m.get_index() < pr.ins.buffer[pr.ins.start] {
-            info!(self.logger, "free_to did nothing");
+        if m.get_index() < pr.ins.buffer[pr.ins.start] {
+            if pr.is_paused() {
+                info!(self.logger, "paused: free_to did nothing {}", m.get_index());
+            } else {
+                info!(self.logger, "not paused: free_to did nothing {}", m.get_index());
+            }
         }
         ctx.maybe_commit = true;
         // We've updated flow control information above, which may
