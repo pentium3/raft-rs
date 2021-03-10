@@ -1318,7 +1318,8 @@ impl<T: Storage> Raft<T> {
             info!(self.logger, "pr_maybe_update: false");
             return;
         } else {
-            info!(self.logger, "pr_maybe_update: true {} {}", m.from, pr.matched);
+            //DEBUG ONLY
+            //info!(self.logger, "pr_maybe_update: true {} {}", m.from, pr.matched);
         }
 
         match pr.state {
@@ -1336,6 +1337,7 @@ impl<T: Storage> Raft<T> {
             }
             ProgressState::Replicate => pr.ins.free_to(m.get_index()),
         }
+        //print of this means pr_maybe_update: true
         if pr.ins.count != 0 && m.get_index() < pr.ins.buffer[pr.ins.start] {
             if pr.is_paused() {
                 info!(self.logger, "paused: free_to did nothing {} {}", m.from, m.get_index());
@@ -1672,7 +1674,8 @@ impl<T: Storage> Raft<T> {
                 self.send_append(from, pr);
             }
             if ctx.loop_append {
-                info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());
+                //DEBUG ONLY
+                //info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());
                 while self.maybe_send_append(from, pr, false) {}
             }
             self.set_prs(prs);

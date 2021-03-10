@@ -289,7 +289,8 @@ impl<T: Storage> RawNode<T> {
         e.context = context;
         m.set_entries(vec![e].into());
         
-        info!(self.raft.logger, "stepping inside propose : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
+        //DEBUG ONLY
+        //info!(self.raft.logger, "stepping inside propose : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         self.raft.step(m)
     }
 
