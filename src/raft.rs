@@ -1912,7 +1912,7 @@ impl<T: Storage> Raft<T> {
     // TODO: revoke pub when there is a better way to test.
     /// For a given message, append the entries to the log.
     pub fn handle_append_entries(&mut self, m: &Message) {
-        let dt1 = Local::now();
+        //let dt1 = Local::now();
 
         if self.pending_request_snapshot != INVALID_INDEX {
             self.send_request_snapshot();
@@ -1958,8 +1958,9 @@ impl<T: Storage> Raft<T> {
             self.send(to_send);
         }
 
-        let dt2 = Local::now();
-        info!(self.logger, "handle_append_entries duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());
+        //DEBUG ONLY
+        /*let dt2 = Local::now();
+        info!(self.logger, "handle_append_entries duration: {}", (dt2.timestamp_nanos()-dt1.timestamp_nanos()).to_string());*/
     }
 
     // TODO: revoke pub when there is a better way to test.
