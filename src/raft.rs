@@ -579,7 +579,7 @@ impl<T: Storage> Raft<T> {
                 self.logger,
                 "Skipping sending to {to}, it'spaused",
                 to = to;
-                "progress" => ?pr,
+                //"progress" => ?pr,
             );
             return false;
         }
