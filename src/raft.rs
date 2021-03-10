@@ -410,12 +410,12 @@ impl<T: Storage> Raft<T> {
             to = m.to;
             "msg" => ?m,
         );
-        info!(
+        /*info!(
             self.logger,
             "send_rf: Sending {:?} with len {msglen}",
             m.get_msg_type(),
             msglen = m.entries.len(),
-        );
+        );*/
         m.from = self.id;
         if m.get_msg_type() == MessageType::MsgRequestVote
             || m.get_msg_type() == MessageType::MsgRequestPreVote
@@ -754,7 +754,9 @@ impl<T: Storage> Raft<T> {
         let self_id = self.id;
         let maybe_update_status = self.mut_prs().get_mut(self_id).unwrap().maybe_update(li);
         let matched = self.mut_prs().get_mut(self_id).unwrap().matched;
-        info!(self.logger, "maybe_update: {} {} {}", maybe_update_status, self_id, matched);
+
+        //DEBUG ONLY
+        //info!(self.logger, "maybe_update: {} {} {}", maybe_update_status, self_id, matched);
 
         // Regardless of maybe_commit's return, our caller will call bcastAppend.
         self.maybe_commit();
