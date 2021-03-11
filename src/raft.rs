@@ -1340,9 +1340,9 @@ impl<T: Storage> Raft<T> {
         //print of this means pr_maybe_update: true
         if pr.ins.count != 0 && m.get_index() < pr.ins.buffer[pr.ins.start] {
             if pr.is_paused() {
-                info!(self.logger, "paused: free_to did nothing {} {}", m.from, m.get_index());
+                info!(self.logger, "paused: free_to  {} {}", m.from, m.get_index());
             } else {
-                info!(self.logger, "not paused: free_to did nothing {} {}", m.from, m.get_index());
+                info!(self.logger, "not paused: free_to  {} {}", m.from, m.get_index());
             }
         }
         ctx.maybe_commit = true;
@@ -1606,7 +1606,8 @@ impl<T: Storage> Raft<T> {
                         }
                     }
                 }
-                info!(self.logger, "bcast_append in step_leader 1: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());  //MsgAppend
+                //DEBUG ONLY
+                //info!(self.logger, "bcast_append in step_leader 1: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());  //MsgAppend
                 self.append_entry(&mut m.mut_entries());
                 self.bcast_append();
                 return Ok(());
