@@ -1298,6 +1298,7 @@ impl<T: Storage> Raft<T> {
                     "progress" => ?pr,
                 );
                 if pr.state == ProgressState::Replicate {
+                    info!(self.logger, "becoming probe in handle_append_response: {} {} {}", m.from, m.term, m.index);
                     pr.become_probe();
                 }
                 ctx.send_append = true;
@@ -1332,6 +1333,7 @@ impl<T: Storage> Raft<T> {
                         from = m.from;
                         "progress" => ?pr,
                     );
+                    info!(self.logger, "becoming probe in handle_snapshot_status3: {} {} {}", m.from, m.term, m.index);
                     pr.become_probe();
                 }
             }
@@ -1477,6 +1479,7 @@ impl<T: Storage> Raft<T> {
         if m.reject {
             pr.snapshot_failure();
             pr.become_probe();
+            info!(self.logger, "becoming probe in handle_snapshot_status: {} {} {}", m.from, m.term, m.index);
             debug!(
                 self.logger,
                 "snapshot failed, resumed sending replication messages to {from}",
@@ -1485,6 +1488,7 @@ impl<T: Storage> Raft<T> {
             );
         } else {
             pr.become_probe();
+            info!(self.logger, "becoming probe in handle_snapshot_status2: {} {} {}", m.from, m.term, m.index);
             debug!(
                 self.logger,
                 "snapshot succeeded, resumed sending replication messages to {from}",
@@ -1532,6 +1536,7 @@ impl<T: Storage> Raft<T> {
                 // During optimistic replication, if the remote becomes unreachable,
                 // there is huge probability that a MsgAppend is lost.
                 if pr.state == ProgressState::Replicate {
+                    info!(self.logger, "becoming probe from MsgUnreachable: {} {} {}", m.from, m.term, m.index);
                     pr.become_probe();
                 }
                 debug!(
