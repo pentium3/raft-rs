@@ -1282,7 +1282,7 @@ impl<T: Storage> Raft<T> {
         pr.recent_active = true;
 
         if m.reject {
-            debug!(
+            info!(
                 self.logger,
                 "received msgAppend rejection";
                 "last index" => m.reject_hint,

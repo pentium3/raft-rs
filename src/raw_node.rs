@@ -446,7 +446,7 @@ impl<T: Storage> RawNode<T> {
         m.set_msg_type(MessageType::MsgUnreachable);
         m.from = id;
         // we don't care if it is ok actually
-        info!(self.raft.logger, "stepping inside report_unreachable : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
+        info!(self.raft.logger, "stepping inside report_unreachableable : {} {} {} {:?}", m.to, m.term, m.index, m.get_msg_type());  //MsgAppend
         let _ = self.raft.step(m);
     }
 
