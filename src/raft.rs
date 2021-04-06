@@ -595,6 +595,7 @@ impl<T: Storage> Raft<T> {
             //info!(self.logger, "maybe_send_append_info1: {} {} {} {} {} {:?}", m.to, m.term, m.index, pr.next_idx, pr.matched, m.get_msg_type());  //MsgHup
             let ents = self.raft_log.entries(pr.next_idx, self.max_msg_size);
             if !allow_empty && ents.as_ref().ok().map_or(true, |e| e.is_empty()) {
+                info!(self.logger, "stop loop_append here?");
                 return false;
             }
             let term = self.raft_log.term(pr.next_idx - 1);
@@ -1282,7 +1283,7 @@ impl<T: Storage> Raft<T> {
         pr.recent_active = true;
 
         if m.reject {
-            info!(
+            debug!(
                 self.logger,
                 "received msgAppend rejection";
                 "last index" => m.reject_hint,
