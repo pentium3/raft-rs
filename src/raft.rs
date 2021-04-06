@@ -1681,7 +1681,7 @@ impl<T: Storage> Raft<T> {
             }
             if ctx.loop_append {
                 //DEBUG ONLY
-                //info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());
+                info!(self.logger, "loop_append inside send_or_loop: {} {} {} {:?}", m.from, m.term, m.index, m.get_msg_type());
                 while self.maybe_send_append(from, pr, false) {}
             }
             self.set_prs(prs);
